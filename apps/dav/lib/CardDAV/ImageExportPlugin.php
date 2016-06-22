@@ -108,8 +108,10 @@ class ImageExportPlugin extends ServerPlugin {
 			$photo = $vObject->PHOTO;
 			$type = $this->getType($photo);
 
-			$valType = $photo->getValueType();
-			$val = ($valType === 'URI' ? $photo->getRawMimeDirValue() : $photo->getValue());
+			if ($photo->getValueType() === 'URI') {
+				return false;
+			}
+			$val = $photo->getValue();
 			return [
 				'Content-Type' => $type,
 				'body' => $val
