@@ -208,15 +208,7 @@ class FederatedShareProvider implements IShareProvider {
 	 */
 	protected function createFederatedShare(IShare $share) {
 		$token = $this->tokenHandler->generateToken();
-		$shareId = $this->addShareToDB(
-			$share->getNodeId(),
-			$share->getNodeType(),
-			$share->getSharedWith(),
-			$share->getSharedBy(),
-			$share->getShareOwner(),
-			$share->getPermissions(),
-			$token
-		);
+
 		$sharedByFederatedId = $share->getSharedBy();
 		if ($this->userManager->userExists($sharedByFederatedId)) {
 			$sharedByFederatedId = $sharedByFederatedId . '@' . $this->addressHandler->generateRemoteURL();
@@ -240,6 +232,16 @@ class FederatedShareProvider implements IShareProvider {
 				[$share->getNode()->getName(), $share->getSharedWith()]);
 			throw new \Exception($message_t);
 		}
+
+		$shareId = $this->addShareToDB(
+			$share->getNodeId(),
+			$share->getNodeType(),
+			$share->getSharedWith(),
+			$share->getSharedBy(),
+			$share->getShareOwner(),
+			$share->getPermissions(),
+			$token
+		);
 
 		return $shareId;
 	}
